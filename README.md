@@ -8,13 +8,13 @@
 
 ## 🧩 프로젝트 구조
 
-hungll/
+hungll
 ├── backend-django/ # Django 기반 회원/선호도/식당 관리 API
 ├── backend-fastapi/ # FastAPI 기반 OpenAI LLM 응답 서버
 ├── frontend-nuxt/ # Nuxt.js 기반 검색 및 추천 UI
 ├── app-flutter/ # Flutter 기반 모바일 앱
 ├── monitor-go/ # Go 기반 모니터링 시스템
-└── docs/award.pdf # 우수팀 상장 PDF
+└── docs/ # 산출물 정리
 
 
 ---
