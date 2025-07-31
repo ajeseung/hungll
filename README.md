@@ -94,7 +94,5 @@ go run main.go
 - [image_5.png](./docs/images/image_5.png)
 - [image_6.png](./docs/images/image_6.png)
 - [image_7.png](./docs/images/image_7.png)
-- [image_8.png](./docs/images/image_8.png)
-- [image_9.png](./docs/images/image_9.png)
 
 
