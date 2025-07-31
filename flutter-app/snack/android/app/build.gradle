@@ -1,0 +1,162 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+import java.util.Properties
+
+println "Project Root Directory: ${rootProject.projectDir}"
+
+// .env 파일 경로 확인
+def envFile = file("${project.rootDir}/../.env")  // 프로젝트 루트 디렉토리 com.hungll.snack
+println ".env file path: ${envFile}"
+
+if (envFile.exists()) {
+    def properties = new Properties()
+    envFile.withReader("UTF-8") { reader ->
+        properties.load(reader)
+    }
+    project.ext {
+        KAKAO_NATIVE_APP_KEY = properties.getProperty("KAKAO_NATIVE_APP_KEY")
+        NAVER_CLIENT_ID = properties.getProperty("NAVER_CLIENT_ID")
+        NAVER_CLIENT_SECRET = properties.getProperty("NAVER_CLIENT_SECRET")
+        NAVER_CLIENT_NAME = properties.getProperty("NAVER_CLIENT_NAME")
+    }
+} else {
+    throw new GradleException(".env file not found")
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    namespace = "com.hungll.snack"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.hungll.snack"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+//     ✅ [윈도우만 필요]  윈도우/리눅스 키스토어 경로 설정 부분은 Mac에선 사용하지 않음
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("win")
+    def debugKeyStorePath = isWindows ? 'C:/Users/son/.android/debug.keystore' : '/home/oem/.android/debug.keystore'
+    def releaseKeyStorePath = isWindows ? 'C:/Users/son/.android/release-key.jks' : '/home/oem/.android/release-key.jks'
+
+    println "Debug Keystore Path: ${debugKeyStorePath}"
+    println "Release Keystore Path: ${releaseKeyStorePath}"
+
+    signingConfigs {
+        debug {
+            // ✅ [윈도우만 필요]
+            storeFile file(debugKeyStorePath)
+             //storeFile file('/home/oem/.android/debug.keystore')  // debug 키스토어 경로
+             storePassword 'android'                              // debug 키스토어 비밀번호
+             keyAlias 'androiddebugkey'                           // debug 키 별칭
+             keyPassword 'android'                                // debug 키 비밀번호
+        }
+
+        release {
+            // ✅ [윈도우만 필요]
+             storeFile file(releaseKeyStorePath)
+             //storeFile file('/home/oem/release-key.jks')         // release 키스토어 경로
+             storePassword 'your_keystore_password'              // release 키스토어 비밀번호
+             keyAlias 'your_key_alias'                           // release 키 별칭
+             keyPassword 'your_key_password'                     // release 키 비밀번호
+        }
+    }
+
+    buildTypes {
+        debug {
+            // ✅ [윈도우만 필요]
+            signingConfig signingConfigs.debug
+            debuggable true
+            manifestPlaceholders = [
+                    kakaoAppKey: project.KAKAO_NATIVE_APP_KEY,
+                    naverClientId: project.NAVER_CLIENT_ID,
+                    naverClientSecret: project.NAVER_CLIENT_SECRET,
+                    naverClientName: project.NAVER_CLIENT_NAME,
+                    applicationName: "android.app.Application"
+            ]
+        }
+
+        release {
+            // ✅ [윈도우만 필요]
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [
+                    kakaoAppKey: project.KAKAO_NATIVE_APP_KEY,
+                    naverClientId: project.NAVER_CLIENT_ID,
+                    naverClientSecret: project.NAVER_CLIENT_SECRET,
+                    naverClientName: project.NAVER_CLIENT_NAME,
+                    applicationName: "android.app.Application"
+            ]
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.hungll.snack"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+
+        manifestPlaceholders = [
+                kakaoAppKey: project.KAKAO_NATIVE_APP_KEY,
+                applicationName: "android.app.Application",
+                naverClientId: project.NAVER_CLIENT_ID
+        ]
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}

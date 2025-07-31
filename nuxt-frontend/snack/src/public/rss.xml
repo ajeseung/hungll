@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>헝글 - 밥친구 게시판</title>
+    <link>https://hungll.com/board/all</link>
+    <description>헝글의 최신 밥친구 모집 글</description>
+    <language>ko</language>
+    <lastBuildDate>{{updatedDate}}</lastBuildDate>
+
+    <item>
+      <title>강남에서 점심 같이 드실 분~</title>
+      <link>https://hungll.com/board/123</link>
+      <description>회사 근처라 같이 식사하실 분 찾습니다!</description>
+      <pubDate>Tue, 21 May 2025 13:00:00 +0900</pubDate>
+    </item>
+    <item>
+      <title>연남동 혼밥 말고 같이 드실 분?</title>
+      <link>https://hungll.com/board/122</link>
+      <description>혼밥 자주 해서 외로워요. 누구든 환영!</description>
+      <pubDate>Mon, 20 May 2025 18:30:00 +0900</pubDate>
+    </item>
+  </channel>
+</rss>

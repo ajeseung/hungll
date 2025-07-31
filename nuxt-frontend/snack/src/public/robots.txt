@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /[provider]-oauth/
+
+Sitemap: https://hungll.com/sitemap.xml

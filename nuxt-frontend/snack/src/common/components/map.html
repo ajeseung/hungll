@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>맛집 지도</title>
+
+    <!-- ✅ Kakao SDK: Nuxt의 runtime config에서 불러오기 -->
+    <script>
+      const key = '<%= runtimeConfig.public.KAKAO_JAVASCRIPT_KEY %>';
+      const kakaoScript = document.createElement('script');
+      kakaoScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&libraries=clusterer`;
+      kakaoScript.async = true;
+      document.head.appendChild(kakaoScript);
+    </script>
+  </head>
+  <body>
+    <div id="__nuxt"></div>
+  </body>
+</html>
